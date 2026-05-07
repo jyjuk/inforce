@@ -2,6 +2,12 @@ import pytest
 
 
 @pytest.mark.django_db
+def test_admin_cannot_vote_without_employee_profile(admin_client, today_menu):
+    response = admin_client.post("/api/voting/", {"menu_id": today_menu.id})
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
 def test_employee_can_vote(employee_client, today_menu):
     response = employee_client.post("/api/voting/", {"menu_id": today_menu.id})
     assert response.status_code == 201
